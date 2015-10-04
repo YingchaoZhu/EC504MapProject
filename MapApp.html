@@ -1,0 +1,46 @@
+<html>
+<head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #MapApp { height: 100%; }
+    </style>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR-Qj7Jpzpuw9NqQJAGSbnObqhALITGNs&callback=initMap"></script>
+    <script>
+    var map;
+    function init(){
+        var center = {lat: 38, lng: -97}; 
+
+        map = new google.maps.Map(document.getElementById("MapApp"), {
+            center: center,
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        
+        google.maps.event.addListener(map, 'click', function(event){
+            placeMarker(event.latLng);
+        });
+        
+        function placeMarker(location){
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+            });
+        }
+        /*
+        var rectangle = new google.maps.Rectangle({
+            map: map,
+            bounds: 
+        });
+        
+        google.maps.event.addListener(rectangle, "bounds_changed", function(){
+            
+        })
+        */
+    }
+    window.onload = init;
+    </script>
+</head>
+<body>
+    <div id = "MapApp"></div>
+</body>
+</html>
