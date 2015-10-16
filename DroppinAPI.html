@@ -4,7 +4,7 @@
       html, body { height: 100%; margin: 0; padding: 0; }
       #MapApp { height: 100%; }
     </style>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR-Qj7Jpzpuw9NqQJAGSbnObqhALITGNs&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS9P5zLK9HBu30ofBWZ1-WTrVTnV_5gv0&callback=initMap"></script>
     <script>
 
     
@@ -32,51 +32,9 @@
                     position: location,
                     map: map,
                     draggable: true,
-                    //animation: google.maps.Animation.DROP,
                 });
             }
         }
-
-        /*
-        //Multiple options
-        var drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: google.maps.drawing.OverlayType.MARKER,
-            drawingControl: true,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_CENTER,
-                drawingModes:[
-                    google.maps.drawing.OverlayType.MARKER,
-                    google.maps.drawing.OverlayType.CIRCLE,
-                    google.maps.drawing.OverlayType.POLYGON,
-                    google.maps.drawing.OverlayType.POLYLINE,
-                    google.maps.drawing.OverlayType.RECTANGLE
-                ]
-            },   
-            circleOptions: {
-              fillColor: '#ffff00',
-              fillOpacity: 1,
-              strokeWeight: 5,
-              clickable: false,
-              editable: true,
-              zIndex: 1
-            }
-            
-            rectangleOpstion: {
-                fillColor: '#cccccc',
-                fillOpacity: 0,
-                strokeWeight: 5,
-            }
-        });
-
-        drawingManager.setOptions({
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.BOTTON_LEFT,
-                drawingModes: [google.maps.drawing.OverlayType.MARKER]
-            }
-        });*/
-        
-        //drawingManager.setMap(map);
-
     }
     window.onload = init;
     </script>
