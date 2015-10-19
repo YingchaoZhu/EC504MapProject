@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Drawing tools</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+        width: 100%;
+        position:absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
+      #infoPanel{
+        border-radius: 15px;
+        background:#fff;
+        background-color:rgba(255,255,255,0.8);
+        height:500px;
+        width:250px;
+        position:absolute;
+        top:150px;  /* adjust value accordingly */
+        left:10px;
+        z-index: 99;  /* adjust value accordingly */
+      }
+    </style>
+  </head>
+<body>
+<div id="map"></div>
+<div id="infoPanel">
+  <h4 style="text-align:center">EC504 MapApp Project</h4>
+  <p>Team member: Yingchao Zhu, Yigang Wang, Dongtai Du</p>
+  <p>Description: This project has two main functions <br><br>
+    1. If a user clicks on a point in the map, your app fill display the decimal latitude and a decimal longitude of the clicked point, and then find and report the 10 closest points to that point from the reference point set.<br><br>
+    2. If a user shades a rectangular area with his/her mouse, the application highlights the set of reference points within the area in the map and counts them.
+  </p>
+  <p>Tools we are using: Google Maps API in javascript, AWS, JAVA for data structure.
+  </p>
+</div>
+<script>
+var selectedMarker = null;
+function CenterControl(controlDiv, map) {
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to recenter the map';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Query';
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to Chicago.
+  controlUI.addEventListener('click', function() {
+    console.log("control clicked!")
+  });
+
+}
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 38, lng: -97},
+    zoom: 5
+  });
+  // Create the DIV to hold the control and call the CenterControl() constructor
+  // passing in this DIV.
+  var centerControlDiv = document.createElement('div');
+  var centerControl = new CenterControl(centerControlDiv, map);
+
+  centerControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlDiv);
+
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.MARKER,
+    drawingControl: true,
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: [
+        google.maps.drawing.OverlayType.MARKER,
+        google.maps.drawing.OverlayType.RECTANGLE
+      ]
+    },
+    rectangleOptions:{
+      editable: true,
+      draggable: true
+    }
+  });
+  drawingManager.setMap(map);
+  /* Event handle for rectangle
+  google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle){
+    var ne = rectangle.getBounds().getNorthEast();
+      var sw = rectangle.getBounds().getSouthWest();
+
+      var contentString = '<b>Rectangle moved.</b><br>' +
+          'New north-east corsner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+          'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+      // Set the info window's content and position.
+      infoWindow.setContent(contentString);
+      infoWindow.setPosition(ne);
+
+      infoWindow.open(map);
+  })
+  */
+  google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+    
+    selectedMarker = marker;
+    var lat = selectedMarker.getPosition().lat();
+    var lng = selectedMarker.getPosition().lng();
+    //console.log(lat);
+    var MarkContent = "Latitude: " + lat.toString() + ", Longitude: " +  lng.toString();
+    console.log(MarkContent)
+    var infowindow = new google.maps.InfoWindow({
+      content: MarkContent
+    });
+    infowindow.open(map, selectedMarker);
+  })
+
+   $('#map').on('mousedown', function() {
+      
+      if ( selectedMarker ) {
+         selectedMarker.setMap(null);
+         //google.maps.event.clearInstanceListeners(selectedMarker);
+      }
+      //selectedMarker = null;
+   });
+}
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR-Qj7Jpzpuw9NqQJAGSbnObqhALITGNs&signed_in=true&libraries=drawing&callback=initMap"
+         async defer></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  </body>
+</html>
