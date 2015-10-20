@@ -36,15 +36,17 @@
 <div id="infoPanel">
   <h4 style="text-align:center">EC504 MapApp Project</h4>
   <p>Team member: Yingchao Zhu, Yigang Wang, Dongtai Du</p>
-  <p>Description: This project has two main functions <br><br>
-    1. If a user clicks on a point in the map, your app fill display the decimal latitude and a decimal longitude of the clicked point, and then find and report the 10 closest points to that point from the reference point set.<br><br>
-    2. If a user shades a rectangular area with his/her mouse, the application highlights the set of reference points within the area in the map and counts them.
+  <p>Description: You can do two things with this project <br><br>
+    1. If you click on a point in the map, it display the decimal latitude and a decimal longitude of the clicked point, and then find and report the 10 closest points to that point from the reference point set.<br><br>
+    2. If you shade a rectangular area with rectangle tool above, the application highlights the set of reference points within the area in the map and counts them.
   </p>
   <p>Tools we are using: Google Maps API in javascript, AWS, JAVA for data structure.
   </p>
 </div>
 <script>
 var selectedMarker = null;
+var MarkContent;
+var queryIsClicked = false;
 function CenterControl(controlDiv, map) {
 
   // Set CSS for the control border.
@@ -72,7 +74,8 @@ function CenterControl(controlDiv, map) {
 
   // Setup the click event listeners: simply set the map to Chicago.
   controlUI.addEventListener('click', function() {
-    console.log("control clicked!")
+    console.log(MarkContent);
+    queryIsClicked = true;
   });
 
 }
@@ -127,8 +130,7 @@ function initMap() {
     var lat = selectedMarker.getPosition().lat();
     var lng = selectedMarker.getPosition().lng();
     //console.log(lat);
-    var MarkContent = "Latitude: " + lat.toString() + ", Longitude: " +  lng.toString();
-    console.log(MarkContent)
+    MarkContent = "Latitude: " + lat.toString() + ", Longitude: " +  lng.toString();
     var infowindow = new google.maps.InfoWindow({
       content: MarkContent
     });
@@ -136,7 +138,6 @@ function initMap() {
   })
 
    $('#map').on('mousedown', function() {
-      
       if ( selectedMarker ) {
          selectedMarker.setMap(null);
          //google.maps.event.clearInstanceListeners(selectedMarker);
